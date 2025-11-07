@@ -1,81 +1,160 @@
-# 🚀 **DevOps Project: Book My Show App Deployment**  
+# Book My Show — React Sample App
 
-Welcome to the **Book My Show App Deployment** project! This project demonstrates how to deploy a **Book My Show-clone application** using modern DevOps tools and practices, following a **DevSecOps** approach.  
+A compact Book My Show clone built with React for learning and demonstration purposes. The app demonstrates component-based UI, simple routing, and state management for booking and ticketing workflows.
 
----
+## Features
+- Browse movies and view seating layout
+- Select seats and book tickets
+- View booking history and generated tickets
+- Sample CI/CD and containerization configs included
 
-## 🛠️ **Tools & Services Used**
+## Tech stack
+- Frontend: React (Create React App)
+- Container: Docker
+- CI/CD: Jenkins (sample files)
 
-| **Category**       | **Tools**                                                                                                                                                                                                 |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Version Control** | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)                                                                                                       |
-| **CI/CD**           | ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=flat-square&logo=jenkins&logoColor=white)                                                                                                    |
-| **Code Quality**    | ![SonarQube](https://img.shields.io/badge/SonarQube-4E9BCD?style=flat-square&logo=sonarqube&logoColor=white)                                                                                              |
-| **Containerization**| ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)                                                                                                       |
-| **Orchestration**   | ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)                                                                                          |
-| **Monitoring**      | ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white) ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white) |
-| **Security**        | ![OWASP](https://img.shields.io/badge/OWASP-000000?style=flat-square&logo=owasp&logoColor=white) ![Trivy](https://img.shields.io/badge/Trivy-00979D?style=flat-square&logo=trivy&logoColor=white)         |
+## Quick start
 
----
+Prerequisites:
+- Node.js (14+)
+- npm or yarn
+- Docker (optional)
 
-## 🚦 **Project Stages**
+Install and run locally:
+1. Open the frontend folder:
+   - [bookmyshow-app/package.json](bookmyshow-app/package.json)
+2. Install dependencies:
+   ```sh
+   cd bookmyshow-app
+   npm install
+   ```
+3. Start the development server:
+   ```sh
+   npm start
+   ```
+4. Access the app at `http://localhost:3000`
 
-### **Phase 1: Deployment to Docker Container**
-- Containerize the application using Docker.
-- Build and push Docker images to a container registry.
-- Run the application in a Docker container.
+## Docker
 
-### **Phase 2: Deployment to EKS Cluster with Monitoring**
-- Deploy the application to an **Amazon EKS (Elastic Kubernetes Service)** cluster.
-- Set up **Prometheus** and **Grafana** for monitoring and visualization.
-- Implement **Trivy** for vulnerability scanning and **OWASP** for security best practices.
+To build and run the app in a container:
 
----
+1. Build the Docker image:
+   ```sh
+   docker build -t bookmyshow-app .
+   ```
+2. Run the container:
+   ```sh
+   docker run -p 3000:3000 bookmyshow-app
+   ```
+3. Access the app at `http://localhost:3000`
 
-## 📂 **Code Repository**
-Explore the code and contribute to the project:  
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/KastroVKiran/Book-My-Show.git)
+## CI/CD
 
----
+Sample Jenkins pipeline and configuration files are included for demonstration purposes. Adjust the configurations as needed for your environment.
 
-## 📹 **Project Video**
-Watch the step-by-step deployment process:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/hBGVwa8MY4A)
+## DevOps & Deployment (Detailed)
 
----
+This project includes example DevOps workflows to build, test, secure, containerize and deploy the frontend with automated pipelines. Below are the main operations, where to find related files in the repo, and the standard commands used.
 
-## 📺 **Docker Playlist**
-Learn more about Docker with this playlist:  
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/playlist?list=PLs-PsDpuAuTeNx3OgGQ1QrpNBo-XE6VBh)
+1) CI/CD pipeline (Jenkins)
+- Files: Jenkinsfile, any Jenkinsfile.* or pipeline scripts in repo root.
+- Pipeline stages:
+  - Checkout source
+  - Install dependencies (npm ci)
+  - Lint (npm run lint)
+  - Unit tests (npm test) and coverage gating
+  - Build production bundle (npm run build)
+  - Build container image (docker build)
+  - Run container image scan (Trivy/Snyk)
+  - Push image to registry (Docker Hub / ACR / ECR)
+  - Deploy to environment (kubectl / Helm)
+  - Notify stakeholders (Slack/email)
+- Pipeline best practices used: parallel lint/tests, artifact retention, build-numbered tags, and failure gates for security and test coverage.
 
----
+2) Build & Test
+- Commands used in CI:
+  - npm ci
+  - npm run lint
+  - npm test -- --coverage
+  - npm run build
+- Test types: unit tests (Jest), optional end-to-end (Cypress) if included.
 
-## 🚀 **Other DevOps Projects**
+3) Containerization & Image Management
+- Dockerfile: bookmyshow-app/Dockerfile
+- Image tagging policy: use CI build number or commit SHA (e.g., myregistry/bookmyshow:${BUILD_NUMBER} or :<git-sha>)
+- Example:
+  - docker build -t myregistry/bookmyshow:${BUILD_NUMBER} .
+  - docker push myregistry/bookmyshow:${BUILD_NUMBER}
 
-| **Project**                                | **Video Link**                                                                                   |
-|--------------------------------------------|--------------------------------------------------------------------------------------------------|
-| **SWIGGY App Project**                     | [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://youtu.be/x55z7rk0NAU) |
-| **Zomato App Project**                     | [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://youtu.be/GyoI6-I68aQ) |
-| **Jenkins + Terraform + EKS Integration**  | [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=sonarqube&logoColor=white)](https://youtu.be/DV79JyFbQE8) |
-| **AWS 3 Tier Architecture Project**        | [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat-square&logo=nexus&logoColor=white)](https://youtu.be/Oj-Hr_aulKA) |
+4) Image Registry & Artifact Storage
+- Supported registries: Docker Hub, Azure Container Registry (ACR), Amazon ECR, GCR.
+- Recommended: use private registry for staging/prod and configure pipeline credentials securely.
 
----
+5) Orchestration & Deployment
+- K8s manifests or Helm charts: check k8s/ or deployment.yml, service.yml in repo
+- Deployment strategy: rolling updates by default; optional blue/green or canary via Helm or additional tooling
+- Manual deploy example:
+  - kubectl set image deployment/bookmyshow bookmyshow=myregistry/bookmyshow:${BUILD_NUMBER} -n staging
+  - kubectl rollout status deployment/bookmyshow -n staging
+- Rollback:
+  - kubectl rollout undo deployment/bookmyshow -n staging
 
-## 🤝 **Connect with Me**
+6) Infrastructure-as-Code (optional)
+- If present: Terraform / ARM / CloudFormation scripts to provision infra (load balancers, registries, k8s cluster)
+- Use separate IaC repo or folder and run plan/apply from pipeline with locked state.
 
-Let's connect and discuss DevOps!  
+7) Secrets & Configuration
+- Do NOT commit secrets. Use:
+  - Kubernetes Secrets or HashiCorp Vault for production
+  - Pipeline credentials / secret stores in Jenkins for build-time access
+- Use ConfigMaps or environment variables for non-sensitive config.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kastro-kiran/)  
-[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/EGw6ZlwUHZc82cA0vXFnwm)
+8) Security & Scanning
+- Image scanning: Trivy/Anchore in pipeline
+- Dependency scanning: npm audit, Snyk
+- Static analysis & linting enforced in CI
 
----
+9) Monitoring, Logging & Alerting
+- Recommendations:
+  - Metrics: Prometheus + Grafana dashboards
+  - Logs: EFK/ELK stack or cloud logging (CloudWatch/Log Analytics)
+  - Alerts: Slack/email on failed deploys, high error rates or SLO breaches
 
-## 📣 **Feedback Request**
+10) Backups, DB migrations & Rollback
+- Database: take snapshots before running migrations; use migration scripts with rollback support
+- Keep release artifacts to allow fast re-deploy of previous stable images
 
-After deploying the app, share your feedback on LinkedIn! Tag me and include the project link to help spread the word.  
+11) Notifications & Observability in CI
+- Pipeline sends build/deploy status to Slack or email and stores logs/artifacts for auditing.
 
----
+12) Example manual commands (CI-adaptable)
+```bash
+cd bookmyshow-app
+npm ci
+npm run lint
+npm test -- --coverage
+npm run build
 
-## 🎉 **Happy Learning!**  
+# Build & push image (replace placeholders)
+docker build -t myregistry/bookmyshow:${BUILD_NUMBER:-latest} .
+docker tag myregistry/bookmyshow:${BUILD_NUMBER:-latest} myregistry/bookmyshow:latest
+docker push myregistry/bookmyshow:${BUILD_NUMBER:-latest}
 
-**KASTRO KIRAN V**
+# Deploy to Kubernetes
+kubectl apply -f k8s/deployment.yml -n staging
+kubectl set image deployment/bookmyshow bookmyshow=myregistry/bookmyshow:${BUILD_NUMBER:-latest} -n staging
+kubectl rollout status deployment/bookmyshow -n staging
+
+# Rollback
+kubectl rollout undo deployment/bookmyshow -n staging
+```
+
+Files referenced:
+- Dockerfile: bookmyshow-app/Dockerfile
+- Jenkins pipeline(s): Jenkinsfile (root)
+- K8s manifests: deployment.yml, service.yml (k8s/ or repo root)
+- Tests: bookmyshow-app/src/*.test.*
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
