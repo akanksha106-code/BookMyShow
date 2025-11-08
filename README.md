@@ -74,42 +74,68 @@ A **BookMyShow clone** - a movie ticket booking platform deployed using:
 
 ### High-Level Architecture
 
-```mermaid
-graph TD
-    A[DEVELOPER WORKFLOW] --> B(Git Push to Main);
-    B --> C{JENKINS CI/CD PIPELINE};
-    subgraph C
-        C1[Checkout] --> C2(SonarQube Analysis);
-        C2 --> C3(Build & Test);
-        C3 --> C4(Trivy Scan);
-        C4 --> C5(Docker Build);
-        C5 --> C6(Push to DockerHub);
-        C6 --> C7(Deploy to K8s);
-        C7 --> C8(Email Notify);
-    end
-    C --> D{AWS EKS CLUSTER (us-east-1)};
-    subgraph D
-        D1[Worker Node 1<br>(t3.medium)] --> D4(Pod: BMS App);
-        D2[Worker Node 2<br>(t3.medium)] --> D5(Pod: BMS App);
-        D3[Worker Node 3<br>(t3.medium)] --> D6(Pod: BMS App);
-        subgraph Load Balancer
-            E(AWS ELB)
-        end
-        D4 --> E;
-        D5 --> E;
-        D6 --> E;
-    end
-    E --> F[End Users Access<br>http://app-url.com];
-    
-    G{MONITORING INFRASTRUCTURE} --> H(Prometheus Server);
-    subgraph G
-        H[Prometheus Server<br>(Metrics Collection)]
-        I[Node Exporter<br>:9100] --> H;
-        J[Jenkins Metrics<br>:8080] --> H;
-        K[EKS Metrics] --> H;
-        H --> L[Grafana Dashboards<br>(Visualization & Alerting)];
-    end
-```
+┌─────────────────────────────────────────────────────────────┐
+│                   DEVELOPER WORKFLOW                         │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+                    [Git Push to Main]
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    JENKINS CI/CD PIPELINE                    │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│  │  Checkout│→ │SonarQube │→ │  Build   │→ │  Trivy   │   │
+│  │   Code   │  │ Analysis │  │  & Test  │  │   Scan   │   │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
+│       ↓              ↓              ↓              ↓         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│  │  Docker  │→ │   Push   │→ │  Deploy  │→ │  Email   │   │
+│  │  Build   │  │ DockerHub│  │   to K8s │  │  Notify  │   │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  AWS EKS CLUSTER (us-east-1)                │
+│                                                               │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
+│  │ Worker Node 1│  │ Worker Node 2│  │ Worker Node 3│     │
+│  │  t3.medium   │  │  t3.medium   │  │  t3.medium   │     │
+│  │              │  │              │  │              │     │
+│  │ ┌──────────┐ │  │ ┌──────────┐ │  │ ┌──────────┐ │     │
+│  │ │   Pod    │ │  │ │   Pod    │ │  │ │   Pod    │ │     │
+│  │ │  BMS App │ │  │ │  BMS App │ │  │ │  BMS App │ │     │
+│  │ └──────────┘ │  │ └──────────┘ │  │ └──────────┘ │     │
+│  └──────────────┘  └──────────────┘  └──────────────┘     │
+│                            ↓                                 │
+│                  ┌──────────────────┐                       │
+│                  │  Load Balancer   │                       │
+│                  │    (AWS ELB)     │                       │
+│                  └──────────────────┘                       │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+                    [End Users Access]
+                            ↓
+                  http://your-app-url.com
+
+┌─────────────────────────────────────────────────────────────┐
+│              MONITORING INFRASTRUCTURE                        │
+│                                                               │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │                   Prometheus Server                   │   │
+│  │              (Metrics Collection & Storage)           │   │
+│  └──────────────────────────────────────────────────────┘   │
+│         ↑                ↑                ↑                   │
+│         │                │                │                   │
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│  │  Node    │    │ Jenkins  │    │   EKS    │              │
+│  │ Exporter │    │ Metrics  │    │ Metrics  │              │
+│  │ :9100    │    │ :8080    │    │          │              │
+│  └──────────┘    └──────────┘    └──────────┘              │
+│         ↓                                                     │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              Grafana Dashboards                       │   │
+│  │         (Visualization & Alerting)                    │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
 
 ### Infrastructure Components
 
