@@ -67,8 +67,8 @@ bookmyshow-devops/
 │   └── package.json
 ├── deployment.yml            # Kubernetes deployment
 ├── service.yml              # Kubernetes service (LoadBalancer)
-├── Jenkinsfile              # CI/CD pipeline definition
-├── prometheus.yml           # Prometheus configuration
+├── Jenkinsfile1              # CI/CD pipeline till docker deployement 
+├── Jenkinsfile2           # CI/CD pipeline till full k8s deployement
 └── README.md
 ```
 
