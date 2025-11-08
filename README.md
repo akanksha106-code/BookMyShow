@@ -1,15 +1,4 @@
-Here is the corrected and refined version of your guide.
 
-I've fixed several errors, including:
-
-  * **Table of Contents:** All links were broken (pointing to Google). They now correctly link to the internal sections of the document.
-  * **Formatting:** Removed unnecessary `&nbsp;` (non-breaking space) characters for cleaner Markdown.
-  * **Technical Inconsistency (Major):** The `kubectl` installation in Part 1 was for version **1.19.6**, but the EKS cluster was being created with version **1.30**. This large version skew would cause failures. I've updated the `kubectl` installation to version 1.30 to match the cluster.
-  * **Logical Flow:** Added missing credential setup steps (for SonarQube and Docker Hub) in `Step 2.6`, which were required by the Jenkins pipeline but not explicitly listed.
-  * **Logical Flow:** Added the `usermod -aG docker jenkins` command to the Docker setup in `Step 2.2`, as this is part of the solution mentioned later in "Challenges" and is a required step.
-  * **Typos:** Fixed minor typos, like the inconsistent `\~` (e.g., `\~$73`) in the Cost Analysis table.
-
------
 
 # 🚀 **Building a Production-Ready Movie Ticketing Platform with DevOps: A Complete Guide**
 
@@ -17,20 +6,20 @@ I've fixed several errors, including:
 
 ## 📋 **Table of Contents**
 
-  * [Introduction](https://www.google.com/search?q=%23-introduction)
-  * [Project Overview](https://www.google.com/search?q=%23-project-overview)
-  * [Architecture](https://www.google.com/search?q=%23%EF%B8%8F-architecture)
-  * [Prerequisites](https://www.google.com/search?q=%23-prerequisites)
-  * [Part 1: Infrastructure Setup](https://www.google.com/search?q=%23-part-1-infrastructure-setup)
-  * [Part 2: CI/CD Pipeline Setup](https://www.google.com/search?q=%23%EF%B8%8F-part-2-cicd-pipeline-setup)
-  * [Part 3: Kubernetes Deployment](https://www.google.com/search?q=%23%EF%B8%8F-part-2-cicd-pipeline-setup) (Covered in Part 2)
-  * [Part 4: Monitoring & Observability](https://www.google.com/search?q=%23-part-4-monitoring--observability)
-  * [Challenges & Solutions](https://www.google.com/search?q=%23-challenges--solutions)
-  * [Results & Achievements](https://www.google.com/search?q=%23-results--achievements)
-  * [Cost Analysis](https://www.google.com/search?q=%23-cost-analysis)
-  * [Key Learnings](https://www.google.com/search?q=%23-key-learnings)
-  * [Conclusion](https://www.google.com/search?q=%23-conclusion)
-
+  * [Introduction]
+  * [Project Overview]
+  * [Architecture]
+  * [Prerequisites]
+  * [Part 1: Infrastructure Setup]
+  * [Part 2: CI/CD Pipeline Setup]
+  * [Part 3: Kubernetes Deployment]
+  * [Part 4: Monitoring & Observability]
+  * [Challenges & Solutions]
+  * [Results & Achievements]
+  * [Cost Analysis]
+  * [Key Learnings]
+  * [Conclusion]
+    
 ## 🎯 **Introduction**
 
 In this comprehensive guide, I'll walk you through building and deploying a production-grade movie ticketing platform using modern DevOps practices. This isn't just another "hello world" deployment – we're implementing a complete CI/CD pipeline with automated testing, security scanning, container orchestration, and real-time monitoring.
@@ -144,13 +133,6 @@ graph TD
       * **OS:** Ubuntu 22.04 LTS
       * **Components:** Prometheus, Node Exporter, Grafana
 
------
-
-## 📚 **Prerequisites**
-
-  * **Knowledge Requirements:** Basic Linux, Git, Docker, Kubernetes, and AWS.
-  * **Tools Required:** AWS Account, GitHub account, Docker Hub account (`akankshatech`), Gmail account, SSH client.
-  * **AWS Services Used:** EC2, EKS, VPC, ELB, IAM, CloudFormation.
 
 -----
 
@@ -174,14 +156,14 @@ Create EC2 Instance:
 
 ### Step 1.2: Create IAM User for EKS
 
-  * **User name:** `eks-admin` (The PDF shows `eles-user` with these policies)
+  * **User name:** `eks-admin` 
   * **Attach policies:**
       * `AmazonEC2FullAccess`
-      * `AmazonEKS_CNI_Policy` (or `AmazonEKSChilPolicy` as seen in PDF)
+      * `AmazonEKS_CNI_Policy` 
       * `AmazonEKSClusterPolicy`
       * `AmazonEKSWorkerNodePolicy`
       * `AWSCloudFormationFullAccess`
-      * `IAMFullAccess` (or `JAMFullAccess` as seen in PDF)
+      * `IAMFullAccess` 
   * **Create Access Keys** and save them.
 
 ### Step 1.3: Install Essential Tools
@@ -321,7 +303,7 @@ chmod +x jenkins.sh
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-**Access Jenkins:** `http://YOUR-SERVER-IP:8080` (e.g., `http://44.203.39.246:8080`)
+**Access Jenkins:** `http://YOUR-SERVER-IP:8080` 
 
 ### Step 2.2: Install Docker
 
@@ -393,7 +375,7 @@ docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
 # Verify
 docker ps
 
-# Access: http://YOUR-SERVER-IP:9000 (e.g., http://44.203.39.246:9000)
+# Access: http://YOUR-SERVER-IP:9000 
 # Default: admin/admin
 ```
 
@@ -462,158 +444,10 @@ sudo systemctl restart jenkins
 **2. Create Kubernetes Manifests:**
 Add `deployment.yml` and `service.yml` to your Git repository.
 
-`deployment.yml`:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: bookmyshow-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: bookmyshow
-  template:
-    metadata:
-      labels:
-        app: bookmyshow
-    spec:
-      containers:
-      - name: bookmyshow
-        image: akankshatech/bms:latest
-        ports:
-        - containerPort: 3000
-```
-
-`service.yml`:
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: bms-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: bookmyshow
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-```
 
 **3. Complete Jenkins Pipeline:**
-Create a new Pipeline job named `BMS-App` and use this script:
+Create a new Pipeline job named `BMS-App` .
 
-```groovy
-pipeline {
-    agent any
-
-    tools {
-        jdk 'jdk17'
-        nodejs 'node23'
-    }
-
-    environment {
-        SCANNER_HOME = tool 'sonar-scanner'
-        DOCKER_IMAGE = 'akankshatech/bms:latest'
-        EKS_CLUSTER_NAME = 'bms-eks'
-        AWS_REGION = 'us-east-1'
-    }
-
-    stages {
-        stage('Clean Workspace') {
-            steps { cleanWs() }
-        }
-
-        stage('Checkout from Git') {
-            steps {
-                git branch: 'main', url: 'https://github.com/your-repo/Book-My-Show.git'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh '''
-                    $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=BMS \
-                        -Dsonar.projectKey=BMS
-                    '''
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                script {
-                    // Use the token credential ID you created ('Sonar-token')
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
-                }
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-        
-        stage('OWASP FS Scan') {
-            steps {
-                // This stage was seen in the PDF
-                echo 'Running OWASP Scan...'
-            }
-        }
-
-        stage('Trivy FS Scan') {
-            steps {
-                sh 'trivy fs . > trivyfs.txt'
-            }
-        }
-
-        stage('Docker Build & Push') {
-            steps {
-                script {
-                    // Use the Docker Hub credential ID you created ('docker')
-                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        sh "docker build -t $DOCKER_IMAGE ."
-                        sh "docker push $DOCKER_IMAGE"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to EKS Cluster') {
-            steps {
-                script {
-                    sh "aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION"
-                    sh "kubectl apply -f deployment.yml"
-                    sh "kubectl apply -f service.yml"
-                    sh "kubectl get pods"
-                    sh "kubectl get svc"
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            emailext (
-                attachLog: true,
-                subject: "'${currentBuild.result}' - ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
-                body: "<html><body><p>Build ${currentBuild.result}. Check results at ${env.BUILD_URL}</p></body></html>",
-                to: 'your-email@gmail.com',
-                mimeType: 'text/html',
-                attachmentsPattern: 'trivyfs.txt'
-            )
-        }
-    }
-}
-```
-
------
 
 ## 📊 **Part 4: Monitoring & Observability**
 
@@ -632,7 +466,7 @@ Connect to the monitoring server and set up Prometheus.
 1.  Download and install Prometheus.
 2.  Create `prometheus.service` file.
 3.  Start the service: `sudo systemctl start prometheus`
-4.  **Access:** `http://3.89.141.174:9090`
+4.  **Access:** `http://server:9090`
 
 ### Step 4.3: Install Node Exporter
 
@@ -653,23 +487,23 @@ scrape_configs:
   - job_name: 'node_exporter'
     static_configs:
       # This server's IP
-      - targets: ['3.89.141.174:9100']
+      - targets: ['monitoring-server:9100']
 
   - job_name: 'jenkins'
     metrics_path: '/prometheus'
     static_configs:
       # Your Jenkins/Dev Server IP
-      - targets: ['44.203.39.246:8080']
+      - targets: ['jenkins-server:8080']
 ```
 
 Reload Prometheus: `curl -X POST http://localhost:9090/-/reload`
-**Verify Targets:** `http://3.89.141.174:9090/targets`
+**Verify Targets:** `http://monitoring:9090/targets`
 
 ### Step 4.5: Install Grafana
 
 1.  Install Grafana using the `apt` repository.
 2.  Start the service: `sudo systemctl start grafana-server`
-3.  **Access:** `http://3.89.141.174:3000` (Default: `admin`/`admin`)
+3.  **Access:** `http://monitoring:3000` (Default: `admin`/`admin`)
 
 ### Step 4.6: Configure Grafana Dashboards
 
