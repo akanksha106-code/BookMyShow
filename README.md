@@ -1,12 +1,5 @@
 # 🎬 BookMyShow DevOps - Production-Ready Deployment
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![Kubernetes](https://img.shields.io/badge/kubernetes-v1.30-blue)]()
-[![AWS EKS](https://img.shields.io/badge/AWS-EKS-orange)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
-
-> **A complete DevOps implementation of a movie ticketing platform with CI/CD, containerization, and monitoring**
-
 Automated deployment pipeline using Jenkins, Docker, Kubernetes (AWS EKS), Prometheus, and Grafana.
 
 ---
