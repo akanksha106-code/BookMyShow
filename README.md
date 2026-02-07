@@ -312,26 +312,3 @@ docker run -p 3000:3000 bms:test
 kubectl port-forward deployment/bookmyshow-deployment 8080:3000
 curl http://localhost:8080
 ```
-
----
-
-## 📚 Documentation
-
-- [Detailed Setup Guide](docs/setup.md)
-- [Pipeline Configuration](docs/pipeline.md)
-- [Monitoring Setup](docs/monitoring.md)
-- [Troubleshooting Guide](docs/troubleshooting.md)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-- [AWS EKS Best Practices](https://aws.github.io/aws-eks-best-practices/)
-- [Jenkins Pipeline Tutorial](https://www.jenkins.io/doc/book/pipeline/)
-- [Prometheus & Grafana Community](https://prometheus.io/)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-
-**Built with ❤️ using DevOps best practices**
